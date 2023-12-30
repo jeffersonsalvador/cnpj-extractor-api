@@ -9,6 +9,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\EstablishmentResource;
 use App\Models\Establishment;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -16,15 +17,30 @@ use Illuminate\Support\Facades\Cache;
 
 class EstablishmentController extends Controller
 {
-    public function index(Request $request): JsonResponse
+    public function index(): JsonResponse
     {
-        $page = $request->input('page', 1);
-        $perPage = 15;
+        $perPage = 10;
+        $page = request()->input('page', 1);
+        $cnaes = request()->input('cnaes', []);
 
-        $dados = Cache::remember("establishments:{$page}", 60, function () use ($page, $perPage) {
-            return Establishment::paginate($perPage, ['*'], 'page', $page);
-        });
+        $query = Establishment::query();
 
-        return response()->json($dados);
+        if (!empty($cnaes)) {
+            $query->where(function($query) use ($cnaes) {
+                $query->whereIn('main_cnae', $cnaes);
+
+                foreach ($cnaes as $cnae) {
+                    $query->orWhere('secondary_cnae', 'LIKE', "%{$cnae}%");
+                }
+            });
+        }
+
+//        $dados = Cache::remember("establishments:{$page}", 60, function () use ($page, $perPage) {
+//            return Establishment::paginate($perPage, ['*'], 'page', $page);
+//        });
+
+        $data = $query->paginate($perPage, ['*'], 'page', $page);
+
+        return EstablishmentResource::collection($data)->response();
     }
 }
