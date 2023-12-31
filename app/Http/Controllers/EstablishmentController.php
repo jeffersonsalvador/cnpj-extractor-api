@@ -23,17 +23,15 @@ class EstablishmentController extends Controller
         $page = request()->input('page', 1);
         $cnaes = request()->input('cnaes', []);
 
-        $query = Establishment::query();
+        $query = Establishment::query()
+            ->join('companies', 'establishments.basic_cnpj', '=', 'companies.basic_cnpj')
+            ->with(['company', 'simples', 'city']);
 
         if (!empty($cnaes)) {
-            $query->where(function($query) use ($cnaes) {
-                $query->whereIn('main_cnae', $cnaes);
-
-                foreach ($cnaes as $cnae) {
-                    $query->orWhere('secondary_cnae', 'LIKE', "%{$cnae}%");
-                }
-            });
+            $query->whereIn('main_cnae', $cnaes);
         }
+
+        $query->orderBy('corporate_name', 'ASC');
 
 //        $dados = Cache::remember("establishments:{$page}", 60, function () use ($page, $perPage) {
 //            return Establishment::paginate($perPage, ['*'], 'page', $page);
