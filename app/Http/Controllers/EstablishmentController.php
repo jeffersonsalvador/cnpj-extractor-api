@@ -33,11 +33,9 @@ class EstablishmentController extends Controller
 
         $query->orderBy('corporate_name', 'ASC');
 
-//        $dados = Cache::remember("establishments:{$page}", 60, function () use ($page, $perPage) {
-//            return Establishment::paginate($perPage, ['*'], 'page', $page);
-//        });
-
-        $data = $query->paginate($perPage, ['*'], 'page', $page);
+        $data = Cache::remember("establishments:$page-$perPage", 60, function () use ($page, $perPage) {
+            return Establishment::paginate($perPage, ['*'], 'page', $page);
+        });
 
         return EstablishmentResource::collection($data)->response();
     }
