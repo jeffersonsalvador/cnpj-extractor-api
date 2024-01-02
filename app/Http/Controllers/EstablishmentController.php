@@ -19,7 +19,7 @@ class EstablishmentController extends Controller
 {
     public function index(): JsonResponse
     {
-        $perPage = 10;
+        $perPage = request()->input('per_page', 10);
         $page = request()->input('page', 1);
         $cnaes = request()->input('cnaes', []);
 
@@ -32,8 +32,9 @@ class EstablishmentController extends Controller
         }
 
         $query->orderBy('corporate_name', 'ASC');
+        $cacheName = "establishments:$page|{$perPage}".implode('|', $cnaes);
 
-        $data = Cache::remember("establishments:{$page}", 60, function () use ($page, $perPage, $query) {
+        $data = Cache::remember($cacheName, 60, function () use ($page, $perPage, $query) {
             return $query->paginate($perPage, ['*'], 'page', $page);
         });
 
