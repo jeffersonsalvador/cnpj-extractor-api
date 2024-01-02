@@ -11,6 +11,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\EstablishmentResource;
 use App\Models\Establishment;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Cache;
@@ -34,7 +35,7 @@ class EstablishmentController extends Controller
         $query->orderBy('corporate_name', 'ASC');
         $cacheName = "establishments:$page|{$perPage}".implode('|', $cnaes);
 
-        $data = Cache::remember($cacheName, 60, function () use ($page, $perPage, $query) {
+        $data = Cache::remember($cacheName, Carbon::now()->addMonth(), function () use ($page, $perPage, $query) {
             return $query->paginate($perPage, ['*'], 'page', $page);
         });
 
