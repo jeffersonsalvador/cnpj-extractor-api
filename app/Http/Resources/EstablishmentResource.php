@@ -43,6 +43,7 @@ class EstablishmentResource extends JsonResource
             'cep' => $this->zip_code ?? null,
             'cidade' => $this->city->name,
             'estado' => $this->state,
+            'cnae_principal' => $this->cnae->name ?? null,
             'socios' => []
         ];
     }

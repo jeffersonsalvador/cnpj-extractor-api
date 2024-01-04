@@ -70,4 +70,9 @@ class Establishment extends Model
     {
         return $this->hasOne(Simples::class, 'basic_cnpj', 'basic_cnpj');
     }
+
+    public function cnae(): hasOne
+    {
+        return $this->hasOne(Cnae::class, 'code', 'main_cnae');
+    }
 }
