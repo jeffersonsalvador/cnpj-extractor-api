@@ -29,7 +29,7 @@ class EstablishmentResource extends JsonResource
             'cnpj' => $this->cnpj,
             'razao_social' => $this->company->corporate_name ?? null,
             'nome_fantasia' => $this->trade_name ?? null,
-            'situação_cadastral' => $this->situacao_cadastral,
+            'situacao_cadastral' => $this->situacao_cadastral,
             'data_abertura' => Carbon::parse($this->activity_start_date)->format('d/m/Y'),
             'natureza_juridica' => $this->company->legalNature->name ?? null,
             'mei' => $this->simples->is_mei ?? null,
