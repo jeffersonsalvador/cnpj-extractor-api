@@ -20,7 +20,7 @@ class EstablishmentController extends Controller
 {
     public function index(): JsonResponse
     {
-        $perPage = request()->input('per_page', 10);
+        $perPage = request()->input('per_page', 100);
         $page = request()->input('page', 1);
         $cnaes = request()->input('cnaes', []);
 
