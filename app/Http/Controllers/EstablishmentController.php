@@ -20,7 +20,7 @@ class EstablishmentController extends Controller
 {
     public function index(): JsonResponse
     {
-        $perPage = request()->input('per_page', 100);
+        $perPage = request()->input('per_page', 1000);
         $page = request()->input('page', 1);
         $cnaes = request()->input('cnaes', []);
 
@@ -35,10 +35,11 @@ class EstablishmentController extends Controller
         $query->orderBy('corporate_name', 'ASC');
         $cacheName = "establishments:$page|{$perPage}".implode('|', $cnaes);
 
-        $data = Cache::remember($cacheName, Carbon::now()->addMonth(), function () use ($page, $perPage, $query) {
-            return $query->paginate($perPage, ['*'], 'page', $page);
-        });
+//        $data = Cache::remember($cacheName, Carbon::now()->addMonth(), function () use ($page, $perPage, $query) {
+//            return $query->paginate($perPage, ['*'], 'page', $page);
+//        });
 
+        $data = $query->paginate($perPage, ['*'], 'page', $page); // remove later
         return EstablishmentResource::collection($data)->response();
     }
 }
