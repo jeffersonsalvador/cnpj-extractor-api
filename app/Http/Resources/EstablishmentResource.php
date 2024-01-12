@@ -41,8 +41,8 @@ class EstablishmentResource extends JsonResource
             'complemento' => $this->additional_address_info ?? null,
             'bairro' => $this->neighborhood ?? null,
             'cep' => $this->zip_code ?? null,
-            'cidade' => $this->city->name,
-            'estado' => $this->state,
+            'cidade' => $this->city->name ?? null,
+            'estado' => $this->state ?? null,
             'cnae_principal' => $this->cnae->name ?? null,
             'socios' => []
         ];
