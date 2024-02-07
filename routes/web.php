@@ -23,3 +23,4 @@ $router->get('/', function () use ($router) {
 
 $router->get('establishments', 'EstablishmentController@index');
 $router->get('cnaes', 'CnaeController@index');
+$router->get('cnpj/{cnpj}', 'CnpjController@show');
