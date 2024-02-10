@@ -17,10 +17,15 @@ class CnpjController extends Controller
 {
     public function show($cnpj): JsonResponse
     {
-        $data = Cnpj::query()->where('cnpj', $cnpj)->first();
-        dd($data);
-        $cacheName = "";
+        $basic = substr($cnpj, 0, 8);
+        $order = substr($cnpj, 8, 4);
+        $dv = substr($cnpj, 12, 2);
+        $data = Cnpj::query()
+            ->where('basic_cnpj', $basic)
+            ->where('cnpj_order', $order)
+            ->where('cnpj_dv', $dv)
+            ->first();
 
-//        return CnpjResource::collection($query);
+        return CnpjResource::collection($data)->response();
     }
 }
